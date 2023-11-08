@@ -16,4 +16,4 @@ Displaying Bank Status: The program provides a summary of the bank's status, sho
 
 Data Persistence: Account data is saved to a text file (bank_data.txt) when the program is closed and loaded from the file when the program is launched, allowing data to be retained between sessions.
 
-The program's user interface is text-based, and users can interact with it by entering numeric options based on the menu provided. The program offers basic account management functionality for a bank, making it suitable for educational purposes and simple account tracking.# Tutorial-C
+The program's user interface is text-based, and users can interact with it by entering numeric options based on the menu provided. The program offers basic account management functionality for a bank, making it suitable for educational purposes and simple account tracking.
