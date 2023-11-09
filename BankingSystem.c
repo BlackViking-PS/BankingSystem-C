@@ -7,7 +7,7 @@
 #define MAX_NID_LENGTH 15
 #define MAX_TYPE_LENGTH 10
 
-int toalAcntsNum = 0;
+int totalAcntsNum = 0;
 float totalMoney = 0.0;
 
 struct node
@@ -42,7 +42,7 @@ int main()
 
     while (1)
     {
-        printf("\nEnter your choice: ");
+        printf("\nEnter your choice (Display Menu '8'): ");
         scanf("%d", &choice);
         printf("\n");
         switch (choice)
@@ -73,6 +73,7 @@ int main()
             break;
         case 9:
             saveDataToFile();
+            printf("\n---Thank You---\n\n");
             exit(1);
 
         default:
@@ -90,8 +91,8 @@ void displayMenu()
     printf("4. Withdrawal\n");
     printf("5. Search an Account\n");
     printf("6. Delete an Account\n");
-    printf("7. Display Menu\n");
-    printf("8. Bank Status\n");
+    printf("7. Bank Status\n");
+    printf("8. Display Menu\n");
     printf("9. Exit\n");
 }
 
@@ -120,7 +121,7 @@ void registerAccount()
         scanf("%f", &newnode->balance);
         newnode->next = NULL;
         head = newnode;
-        toalAcntsNum++;
+        totalAcntsNum++;
         totalMoney = totalMoney + newnode->balance;
         printf("\n**Success**\n");
     }
@@ -152,7 +153,7 @@ void registerAccount()
         scanf("%f", &newnode->balance);
         newnode->next = NULL;
         temp->next = newnode;
-        toalAcntsNum++;
+        totalAcntsNum++;
         totalMoney = totalMoney + newnode->balance;
         printf("\n**Success**\n");
     }
@@ -694,10 +695,10 @@ void deleteAccount()
             temp = head;
             head = head->next;
             free(temp);
-            toalAcntsNum--;
+            totalAcntsNum--;
             printf("\n**Account Successfully Deleted**\n");
         }
-        else if (indexNum > 1 && indexNum < toalAcntsNum)
+        else if (indexNum > 1 && indexNum < totalAcntsNum)
         {
             struct node *temp, *previous, *after;
             temp = head;
@@ -709,10 +710,10 @@ void deleteAccount()
             after = temp->next;
             previous->next = after;
             free(temp);
-            toalAcntsNum--;
+            totalAcntsNum--;
             printf("\n**Account Successfully Deleted**\n");
         }
-        else if (indexNum == toalAcntsNum)
+        else if (indexNum == totalAcntsNum)
         {
             struct node *temp, *previous;
             temp = head;
@@ -723,7 +724,7 @@ void deleteAccount()
             }
             previous->next = NULL;
             free(temp);
-            toalAcntsNum--;
+            totalAcntsNum--;
             printf("\n**Account Successfully Deleted**\n");
         }
         else
@@ -736,7 +737,7 @@ void deleteAccount()
 void displayBankStatus()
 {
     printf("\n---Bank Status---\n");
-    printf("\nTotal Number of Registered Accounts: %d\n", toalAcntsNum);
+    printf("\nTotal Number of Registered Accounts: %d\n", totalAcntsNum);
     printf("\nTotal Sum of Money Present: Tk %.2f\n", totalMoney);
 }
 
@@ -778,10 +779,17 @@ void loadDataFromFile()
             free(temp);
         }
 
-        while (!feof(file))
+        struct node *newnode;
+
+        while (1)
         {
-            struct node *newnode = (struct node *)malloc(sizeof(struct node));
-            fscanf(file, "%d %s %s %lld %s %f %s\n", &newnode->accountNumber, newnode->name, newnode->surname, &newnode->NID, newnode->address, &newnode->balance, newnode->accountType);
+            newnode = (struct node *)malloc(sizeof(struct node));
+            if (fscanf(file, "%d %s %s %lld %s %f %s\n", &newnode->accountNumber, newnode->name, newnode->surname, &newnode->NID, newnode->address, &newnode->balance, newnode->accountType) != 7)
+            {
+                free(newnode);
+                break;  // Exit the loop if reading fails
+            }
+
             newnode->next = NULL;
 
             if (head == NULL)
@@ -797,10 +805,11 @@ void loadDataFromFile()
                 }
                 temp->next = newnode;
             }
-            toalAcntsNum++;
+            totalAcntsNum++;
             totalMoney += newnode->balance;
         }
 
         fclose(file);
     }
 }
+
