@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
+#include <ctype.h>
 
 #define MAX_NAME_LENGTH 50
 #define MAX_ADDRESS_LENGTH 100
@@ -103,16 +105,35 @@ void registerAccount()
     {   
         struct node *newnode;
         newnode = (struct node *)malloc(sizeof(struct node));
-        newnode->accountNumber = rand() % 9000 + 1000;
 
         printf("\nEnter customer details:\n");
-        
+        int acntnum1;
+        printf("\nEnter Account Number to be registered: ");
+        scanf("%d", &acntnum1);
+        newnode->accountNumber = acntnum1;
         printf("Name: ");
         scanf(" %[^\n]", newnode->name);
         printf("Surname: ");
         scanf(" %[^\n]", newnode->surname);
-        printf("NID: ");
-        scanf("%lld", &newnode->NID);
+        //printf("NID: ");
+        //scanf("%lld", &newnode->NID);
+
+        printf("NID (11 digits): ");
+        char nidString[MAX_NID_LENGTH + 1]; // Additional buffer to read the NID as a string
+        int nidLength;
+
+        do {
+            scanf("%s", nidString);
+            nidLength = strlen(nidString);
+
+            if (nidLength != 11) {
+                printf("Please enter 11 digits for the NID: ");
+            }
+        } while (nidLength != 11);
+
+        // Convert the string to a long long integer
+        newnode->NID = atoll(nidString);
+        
         printf("Address: ");
         scanf(" %[^\n]", newnode->address);
         printf("Account Type: ");
@@ -135,16 +156,30 @@ void registerAccount()
         }
         newnode = (struct node *)malloc(sizeof(struct node));
 
-        newnode->accountNumber = rand() % 9000 + 1000;
+        
 
         printf("\nEnter customer details:\n");
 
+        int acntnum1;
+        printf("\nEnter Account Number to be registered: ");
+        scanf("%d", &acntnum1);
+        newnode->accountNumber = acntnum1;
         printf("Name: ");
         scanf(" %[^\n]", newnode->name);
         printf("Surname: ");
         scanf(" %[^\n]", newnode->surname);
-        printf("NID: ");
-        scanf("%lld", &newnode->NID);
+        printf("NID (11 digits): ");
+        char nidString[MAX_NID_LENGTH + 1];
+        int nidLength;
+        do {
+            scanf("%s", nidString);
+            nidLength = strlen(nidString);
+
+            if (nidLength != 11) {
+                printf("Please enter 11 digits for the NID: ");
+            }
+        } while (nidLength != 11);
+        newnode->NID = atoll(nidString);
         printf("Address: ");
         scanf(" %[^\n]", newnode->address);
         printf("Account Type: ");
@@ -298,8 +333,21 @@ void searchAccount()
         else if (option == 5)
         {
             long long int NID2;
-            printf("\nEnter NID: ");
-            scanf("%lld", &NID2);
+            char nidString[MAX_NID_LENGTH + 1]; 
+            int nidLength;
+
+            printf("\nEnter NID (11 digits): ");
+
+            do {
+                scanf("%s", nidString);
+                nidLength = strlen(nidString);
+
+                if (nidLength != 11) {
+                    printf("Please enter 11 digits for the NID: ");
+                }
+            } while (nidLength != 11);
+            NID2 = atoll(nidString);
+
             temp = head;
             while (temp->NID != NID2)
             {
@@ -465,8 +513,21 @@ void withdrawal()
         else if (option == 5)
         {
             long long int NID2;
-            printf("\nEnter NID: ");
-            scanf("%lld", &NID2);
+            char nidString[MAX_NID_LENGTH + 1]; 
+            int nidLength;
+
+            printf("\nEnter NID (11 digits): ");
+
+            do {
+                scanf("%s", nidString);
+                nidLength = strlen(nidString);
+
+                if (nidLength != 11) {
+                    printf("Please enter 11 digits for the NID: ");
+                }
+            } while (nidLength != 11);
+            NID2 = atoll(nidString);
+
             temp = head;
             while (temp->NID != NID2)
             {
@@ -639,8 +700,21 @@ void deposit()
         else if (option == 5)
         {
             long long int NID2;
-            printf("\nEnter NID: ");
-            scanf("%lld", &NID2);
+            char nidString[MAX_NID_LENGTH + 1]; 
+            int nidLength;
+
+            printf("\nEnter NID (11 digits): ");
+
+            do {
+                scanf("%s", nidString);
+                nidLength = strlen(nidString);
+
+                if (nidLength != 11) {
+                    printf("Please enter 11 digits for the NID: ");
+                }
+            } while (nidLength != 11);
+            NID2 = atoll(nidString);
+
             temp = head;
             while (temp->NID != NID2)
             {
@@ -681,7 +755,7 @@ void deleteAccount()
     listAccount();
     if (head == NULL)
     {
-        // return;
+        return;
     }
     else
     {
