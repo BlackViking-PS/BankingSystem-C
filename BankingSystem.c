@@ -32,6 +32,7 @@ void deposit();
 void withdrawal();
 void searchAccount();
 void displayBankStatus();
+void freeNodes();
 void loadDataFromFile();
 void saveDataToFile();
 
@@ -75,6 +76,7 @@ int main()
             break;
         case 9:
             saveDataToFile();
+            freeNodes();
             printf("\n---Thank You---\n\n");
             exit(1);
 
@@ -105,16 +107,31 @@ void registerAccount()
     {   
         struct node *newnode;
         newnode = (struct node *)malloc(sizeof(struct node));
-        newnode->accountNumber = rand() % 9000 + 1000;
 
         printf("\nEnter customer details:\n");
-        
+        int acntnum1;
+        printf("\nEnter Account Number to be registered: ");
+        scanf("%d", &acntnum1);
+        newnode->accountNumber = acntnum1;
         printf("Name: ");
         scanf(" %[^\n]", newnode->name);
         printf("Surname: ");
         scanf(" %[^\n]", newnode->surname);
-        printf("NID: ");
-        scanf("%lld", &newnode->NID);       
+        printf("NID (11 digits): ");
+        char nidString[MAX_NID_LENGTH + 1]; 
+        int nidLength;
+
+        do {
+            scanf("%s", nidString);
+            nidLength = strlen(nidString);
+
+            if (nidLength != 11) {
+                printf("Please enter 11 digits for the NID: ");
+            }
+        } while (nidLength != 11);
+
+        newnode->NID = atoll(nidString);
+        
         printf("Address: ");
         scanf(" %[^\n]", newnode->address);
         printf("Account Type: ");
@@ -137,17 +154,30 @@ void registerAccount()
         }
         newnode = (struct node *)malloc(sizeof(struct node));
 
-        newnode->accountNumber = rand() % 9000 + 1000;
+        
 
         printf("\nEnter customer details:\n");
 
+        int acntnum1;
+        printf("\nEnter Account Number to be registered: ");
+        scanf("%d", &acntnum1);
+        newnode->accountNumber = acntnum1;
         printf("Name: ");
         scanf(" %[^\n]", newnode->name);
         printf("Surname: ");
         scanf(" %[^\n]", newnode->surname);
-        printf("NID: ");
+        printf("NID (11 digits): ");
+        char nidString[MAX_NID_LENGTH + 1];
+        int nidLength;
+        do {
+            scanf("%s", nidString);
+            nidLength = strlen(nidString);
 
-        scanf("%lld", &newnode->NID);
+            if (nidLength != 11) {
+                printf("Please enter 11 digits for the NID: ");
+            }
+        } while (nidLength != 11);
+        newnode->NID = atoll(nidString);
         printf("Address: ");
         scanf(" %[^\n]", newnode->address);
         printf("Account Type: ");
@@ -301,8 +331,21 @@ void searchAccount()
         else if (option == 5)
         {
             long long int NID2;
-            printf("\nEnter NID: ");
-            scanf("%lld", &NID2);
+            char nidString[MAX_NID_LENGTH + 1]; 
+            int nidLength;
+
+            printf("\nEnter NID (11 digits): ");
+
+            do {
+                scanf("%s", nidString);
+                nidLength = strlen(nidString);
+
+                if (nidLength != 11) {
+                    printf("Please enter 11 digits for the NID: ");
+                }
+            } while (nidLength != 11);
+            NID2 = atoll(nidString);
+
             temp = head;
             while (temp->NID != NID2)
             {
@@ -468,8 +511,21 @@ void withdrawal()
         else if (option == 5)
         {
             long long int NID2;
-            printf("\nEnter NID: ");
-            scanf("%lld", &NID2);
+            char nidString[MAX_NID_LENGTH + 1]; 
+            int nidLength;
+
+            printf("\nEnter NID (11 digits): ");
+
+            do {
+                scanf("%s", nidString);
+                nidLength = strlen(nidString);
+
+                if (nidLength != 11) {
+                    printf("Please enter 11 digits for the NID: ");
+                }
+            } while (nidLength != 11);
+            NID2 = atoll(nidString);
+
             temp = head;
             while (temp->NID != NID2)
             {
@@ -642,8 +698,21 @@ void deposit()
         else if (option == 5)
         {
             long long int NID2;
-            printf("\nEnter NID: ");
-            scanf("%lld", &NID2);
+            char nidString[MAX_NID_LENGTH + 1]; 
+            int nidLength;
+
+            printf("\nEnter NID (11 digits): ");
+
+            do {
+                scanf("%s", nidString);
+                nidLength = strlen(nidString);
+
+                if (nidLength != 11) {
+                    printf("Please enter 11 digits for the NID: ");
+                }
+            } while (nidLength != 11);
+            NID2 = atoll(nidString);
+
             temp = head;
             while (temp->NID != NID2)
             {
@@ -684,12 +753,12 @@ void deleteAccount()
     listAccount();
     if (head == NULL)
     {
-        // return;
+        return;
     }
     else
     {
         int indexNum;
-        printf("\nEnter the index of Account to Delete it: \n");
+        printf("\nEnter the index of Account to Delete it: ");
         scanf("%d", &indexNum);
 
         if (indexNum == 1)
@@ -758,11 +827,20 @@ void saveDataToFile()
         while (temp != NULL)
         {
             fprintf(file, "%d %s %s %lld %s %.2f %s\n", temp->accountNumber, temp->name, temp->surname, temp->NID, temp->address, temp->balance, temp->accountType);
-            // fprintf(file, )
             temp = temp->next;
         }
         fclose(file);
     }
+}
+
+void freeNodes()
+{
+    while (head != NULL)
+        {
+            struct node *temp = head;
+            head = head->next;
+            free(temp);
+        }
 }
 
 void loadDataFromFile()
@@ -775,12 +853,7 @@ void loadDataFromFile()
     }
     else
     {
-        while (head != NULL)
-        {
-            struct node *temp = head;
-            head = head->next;
-            free(temp);
-        }
+        freeNodes();
 
         struct node *newnode;
 
