@@ -32,6 +32,7 @@ void deposit();
 void withdrawal();
 void searchAccount();
 void displayBankStatus();
+void freeNodes();
 void loadDataFromFile();
 void saveDataToFile();
 
@@ -75,6 +76,7 @@ int main()
             break;
         case 9:
             saveDataToFile();
+            freeNodes();
             printf("\n---Thank You---\n\n");
             exit(1);
 
@@ -115,11 +117,8 @@ void registerAccount()
         scanf(" %[^\n]", newnode->name);
         printf("Surname: ");
         scanf(" %[^\n]", newnode->surname);
-        //printf("NID: ");
-        //scanf("%lld", &newnode->NID);
-
         printf("NID (11 digits): ");
-        char nidString[MAX_NID_LENGTH + 1]; // Additional buffer to read the NID as a string
+        char nidString[MAX_NID_LENGTH + 1]; 
         int nidLength;
 
         do {
@@ -131,7 +130,6 @@ void registerAccount()
             }
         } while (nidLength != 11);
 
-        // Convert the string to a long long integer
         newnode->NID = atoll(nidString);
         
         printf("Address: ");
@@ -760,7 +758,7 @@ void deleteAccount()
     else
     {
         int indexNum;
-        printf("\nEnter the index of Account to Delete it: \n");
+        printf("\nEnter the index of Account to Delete it: ");
         scanf("%d", &indexNum);
 
         if (indexNum == 1)
@@ -829,11 +827,20 @@ void saveDataToFile()
         while (temp != NULL)
         {
             fprintf(file, "%d %s %s %lld %s %.2f %s\n", temp->accountNumber, temp->name, temp->surname, temp->NID, temp->address, temp->balance, temp->accountType);
-            // fprintf(file, )
             temp = temp->next;
         }
         fclose(file);
     }
+}
+
+void freeNodes()
+{
+    while (head != NULL)
+        {
+            struct node *temp = head;
+            head = head->next;
+            free(temp);
+        }
 }
 
 void loadDataFromFile()
@@ -846,12 +853,7 @@ void loadDataFromFile()
     }
     else
     {
-        while (head != NULL)
-        {
-            struct node *temp = head;
-            head = head->next;
-            free(temp);
-        }
+        freeNodes();
 
         struct node *newnode;
 
